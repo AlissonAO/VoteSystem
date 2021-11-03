@@ -1,0 +1,51 @@
+timezone: America/Sao_Paulo
+
+server:
+  tomcat:
+    relaxed-query-chars: ['{','}']
+  port: 8080
+  servlet:
+    context-path: /
+
+spring:
+  datasource:
+    driverClassName: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/votacao
+    username: root
+    password: sam1436
+  jpa:
+    database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
+    hibernate.dialect: org.hibernate.dialect.MySQL5InnoDBDialect
+    hibernate.ddl-auto: update
+    generate-ddl: true
+    show-sql: true
+
+kafka:
+  hosts: localhost:9092
+
+logging:
+  level:
+    org:
+      springframework.web: INFO
+      hibernate: INFO
+#  file: application.log
+
+management:
+  endpoints:
+    enabled-by-default: false
+    web:
+      exposure.include: info, health, metrics, loggers
+  endpoint:
+    info:
+      enabled: true
+    health:
+      enabled: true
+      show-details: always
+    metrics:
+      enabled: true
+    loggers:
+      enabled: true
+
+springdoc:
+  api-docs:
+    path: /api-docs
