@@ -1,0 +1,12 @@
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  name: app-votacao-ingress
+spec:
+  rules:
+  - host: localhost
+      http:
+        paths:
+        - backend:
+          serviceName: app-votacao-service
+          servicePort: 8080

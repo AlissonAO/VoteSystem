@@ -1,0 +1,25 @@
+#!/bin/bash
+
+# Secrets
+kubectl apply -f secrets.yml
+
+# MapConfig
+kubectl apply -f mapconfig.yml
+
+# MySQL
+kubectl apply -f app-mysql.yml
+
+# Zookeeper
+kubectl apply -f app-zookeeper.yml
+
+# Kafka
+kubectl apply -f app-kafka.yml
+
+
+# Votacao
+kubectl apply -f app-votacao.yml
+
+# Externo
+minikube addons enable ingress
+kubectl apply -f ingress.yml
+#minikube service app-all-service

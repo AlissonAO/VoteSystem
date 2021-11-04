@@ -1,0 +1,3 @@
+mvn clean install || ./compile_conteiner
+rm *.log
+

@@ -1,0 +1,16 @@
+
+
+docker pull openjdk:8
+
+docker build -t votacao-api-backend-img:1.0 .
+docker build -t votacao-api-backend-img:latest .
+
+#Descomentar para registrar a imagem no dockerhub
+#docker image tag votacao-api-backend-img:latest alissonao/votacao-backend-img:latest
+#docker login
+#docker push alissonao/votacao-api-backend-img:latest
+
+rm *.log
+rm application*
+rm -Rf target
+

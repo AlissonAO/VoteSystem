@@ -1,0 +1,51 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: app-votacao-deployment
+  labels:
+    app: votacao
+
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: votacao
+  template:
+    metadata:
+      labels:
+        app: votacao
+    spec:
+      containers:
+        - name: votacao
+          image: alissonao/votacao-api-backend-img
+          ports:
+            - containerPort: 8080
+          env:
+            - name: SPRING_DATASOURCE_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: app-votacao-configmap
+                  key: votacao-jdbc
+            - name: SPRING_DATASOURCE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: mysql-secret
+                  key: mysql-password
+            - name: KAFKA_HOSTS
+              valueFrom:
+                configMapKeyRef:
+                  name: app-votacao-configmap
+                  key: votacao-kafka-hosts
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: app-votacao-service
+spec:
+  selector:
+    app: app-votacao-deployment
+  ports:
+    - protocol: TCP
+      port: 8080
+      targetPort: 8080

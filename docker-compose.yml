@@ -1,0 +1,64 @@
+version: "3"
+services:
+  db:
+    image: mysql:5.7
+    command: --default-authentication-plugin=mysql_native_password
+    environment:
+      MYSQL_ROOT_PASSWORD: sam1436
+      MYSQL_DATABASE: votacao
+    ports:
+      - "3306:3306"
+    #volumes:
+      #- "mysql-volume:/var/lib/mysql"
+    #networks:
+    #  - app-tier
+
+  zookeeper:
+    image: "bitnami/zookeeper:3.6.1"
+    #networks:
+    #  - app-tier
+    ports:
+      - "2181:2181"
+    environment:
+      - ALLOW_ANONYMOUS_LOGIN=yes
+
+  broker:
+    image: "bitnami/kafka:2.5.0"
+    #networks:
+    #  - app-tier
+    ports:
+      - "9092:9092"
+    environment:
+      - ALLOW_PLAINTEXT_LISTENER=yes
+      - KAFKA_CFG_ZOOKEEPER_CONNECT=zookeeper:2181
+      - KAFKA_CFG_ADVERTISED_LISTENERS=PLAINTEXT://localhost:9092
+    depends_on:
+      - zookeeper
+
+  app:
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    image: votacao-api-backend-img:latest
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: any
+    ports:
+      - "8080:8080"
+    environment:
+      - KAFKA_HOSTS=localhost:9092
+      - WAIT_START_DURATION=50
+
+    #networks:
+    #  - app-tier
+
+    depends_on:
+      - db
+      - zookeeper
+      - broker
+#networks:
+#  app-tier:
+#    driver: bridge
+volumes:
+  mysql-volume:

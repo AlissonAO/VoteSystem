@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: app-votacao-configmap
+data:
+  votacao-jdbc: jdbc:mysql://app-votacao-mysql-service:3306/votacao
+  votacao-kafka-hosts: app-votacao-kafka-service:9092
