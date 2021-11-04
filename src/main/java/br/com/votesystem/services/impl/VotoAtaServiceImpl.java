@@ -61,9 +61,9 @@ public class VotoAtaServiceImpl implements IVotoAtaService {
                 dto.setVotosSim(value.getPoll().countVotoSim());
                 dto.setvotosNao(value.getPoll().countVotoNao());
             } catch (Exception e) {
-                dto.setVotosTotal(0L);
-                dto.setVotosSim(0L);
-                dto.setvotosNao(0L);
+                dto.setVotosTotal(0);
+                dto.setVotosSim(0);
+                dto.setvotosNao(0);
             }
 
         } catch (Exception e) {

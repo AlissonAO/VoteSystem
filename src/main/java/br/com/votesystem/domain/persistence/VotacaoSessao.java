@@ -54,17 +54,17 @@ public class VotacaoSessao implements Serializable, Comparable<VotacaoSessao> {
     @JoinColumn(name="ata_id")
     private VotacaoAta votacaoAta = null;
 
-    @OneToMany(mappedBy = "votacao", orphanRemoval = true, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "votacaoSessao", orphanRemoval = true, fetch = FetchType.EAGER)
     private Collection<VotoAssociado> votos = null;
 
     @Column(name="votos_sim")
-    private Long votosSim = null;
+    private Integer votosSim = null;
 
     @Column(name="votos_nao")
-    private Long votesNao = null;
+    private Integer votosNao = null;
 
     @Column(name="votos_total")
-    private Long votosTotal = null;
+    private Integer votosTotal = null;
 
     /**
      * Constructor
@@ -75,7 +75,7 @@ public class VotacaoSessao implements Serializable, Comparable<VotacaoSessao> {
         this.votacaoAta = null;
         this.votos = null;
         this.votosSim = null;
-        this.votesNao = null;
+        this.votosNao = null;
         votosTotal = null;
     }
 
@@ -191,9 +191,9 @@ public class VotacaoSessao implements Serializable, Comparable<VotacaoSessao> {
      * Return votesAgrees
      * @return votesAgrees
      */
-    public Long getVotosAgrees() {
+    public Integer getVotosAgrees() {
         if(votosSim == null) {
-            this.votosSim = 0L;
+            this.votosSim = 0;
         }
 
         return votosSim;
@@ -203,37 +203,37 @@ public class VotacaoSessao implements Serializable, Comparable<VotacaoSessao> {
      * Set votesAgrees
      * @param votesAgrees
      */
-    public void setVotosAgrees(final Long votesAgrees) {
-        this.votosSim = votesAgrees != null && votesAgrees >= 0L ? votesAgrees : 0L;
+    public void setVotosAgrees(Integer votesAgrees) {
+        this.votosSim = votesAgrees != null && votesAgrees >= 0 ? votesAgrees : 0;
     }
 
     /**
      * Return votesDisagrees
      * @return votesDisagrees
      */
-    public Long getVotosDisagrees() {
-        if(votesNao == null) {
-            this.votesNao = 0L;
+    public Integer getVotosDisagrees() {
+        if(votosNao == null) {
+            this.votosNao = 0;
         }
 
-        return votesNao;
+        return votosNao;
     }
 
     /**
      * Set votesDisagrees
      * @param votesDisagrees
      */
-    public void setVotosDisagrees(final Long votesDisagrees) {
-        this.votesNao = votesDisagrees != null && votesDisagrees >= 0L ? votesDisagrees : 0L;
+    public void setVotosDisagrees(Integer votesDisagrees) {
+        this.votosNao = votesDisagrees != null && votesDisagrees >= 0 ? votesDisagrees : 0;
     }
 
     /**
      * Return votesTotal
      * @return votesTotal
      */
-    public Long getVotosTotal() {
+    public Integer getVotosTotal() {
         if(votosTotal == null) {
-            this.votosTotal = 0L;
+            this.votosTotal = 0;
         }
         return votosTotal;
     }
@@ -242,8 +242,8 @@ public class VotacaoSessao implements Serializable, Comparable<VotacaoSessao> {
      * Set votesTotal
      * @param votesTotal
      */
-    public void setVotosTotal(final Long votesTotal) {
-        this.votosTotal = votesTotal != null && votesTotal >= 0L ? votesTotal : 0L;
+    public void setVotosTotal( Integer votesTotal) {
+        this.votosTotal = votesTotal != null && votesTotal >= 0 ? votesTotal : 0;
     }
 
     /**
@@ -266,7 +266,7 @@ public class VotacaoSessao implements Serializable, Comparable<VotacaoSessao> {
      * @return stream of votes
      */
     private Stream<VotoAssociado> validVotos() {
-        return getVotos().stream().filter(p -> p != null && p.isValid() && p.getPoll().equals(this));
+        return getVotos().stream().filter(p -> p != null && p.isValid() && p.getVotacaoSessao().equals(this));
     }
 
     /**
@@ -274,11 +274,11 @@ public class VotacaoSessao implements Serializable, Comparable<VotacaoSessao> {
      * @param type
      * @return count
      */
-    private Long computeVotos(final Voto type) {
-        Long count = null;
+    private Integer computeVotos(final Voto type) {
+    	Integer count = null;
 
         if(type != null) {
-            count = validVotos().filter(p -> p.getVoto().equals(type)).count();
+            count = (int) validVotos().filter(p -> p.getVoto().equals(type)).count();
         }
 
         return count;
@@ -288,7 +288,7 @@ public class VotacaoSessao implements Serializable, Comparable<VotacaoSessao> {
      * Compute agrees
      * @return count
      */
-    public Long countVotoSim() {
+    public Integer countVotoSim() {
         return computeVotos(Voto.AGREE);
     }
 
@@ -296,7 +296,7 @@ public class VotacaoSessao implements Serializable, Comparable<VotacaoSessao> {
      * Compute disagrees
      * @return count
      */
-    public Long countVotoNao() {
+    public Integer countVotoNao() {
         return computeVotos(Voto.DISAGREE);
     }
 
@@ -304,8 +304,8 @@ public class VotacaoSessao implements Serializable, Comparable<VotacaoSessao> {
      * Compute total votes
      * @return total votes
      */
-    public Long countTotal() {
-        return validVotos().count();
+    public Integer countTotal() {
+        return (int) validVotos().count();
     }
 
     /**
@@ -326,7 +326,7 @@ public class VotacaoSessao implements Serializable, Comparable<VotacaoSessao> {
         boolean sucess = isOpen() && value != null && value.getAssociado() != null  && !alreadyVotod(value.getAssociado());
 
         if(sucess) {
-            value.setPoll(this);
+            value.setVotacaoSessao(this);
             getVotos().add(value);
         }
 

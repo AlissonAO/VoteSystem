@@ -21,7 +21,7 @@ public interface IAssociadoService {
 
     CpfState validateIdentification(final String cpf);
 
-    Collection<Associado> findByCpf(final String cpf);
+    Associado findByCpf( String cpf);
 
     Collection<Associado> findAll();
 

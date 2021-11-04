@@ -135,7 +135,7 @@ public class VotoSessaoServiceImpl implements IVotoSessaoService {
             }
 
             if(value.getId() == null) {
-                value.setId(new  VotacaoSessao().getId().toString());
+                value.setId(new  VotacaoSessao().getId());
             }
 
             if (votoAtaService.findById(Long.valueOf(value.getIdVotoAta())).getPoll() != null) {
@@ -147,7 +147,7 @@ public class VotoSessaoServiceImpl implements IVotoSessaoService {
             }
 
             sendMessage.send(new Action<>(value, CRUD.CREATE));
-            id = value.getId();
+            id = value.getId().toString();
         } catch (Exception e) {
             logger.error("ERROR on VALIDATE PollMeeting {} to ADD: ", e, value);
             throw e;

@@ -68,10 +68,8 @@ public class AssociadoServiceImpl implements IAssociadoService {
     }
 
    
-    public Collection<Associado> findByCpf(String cpf) {
-        Collection<Associado> items = repository
-                .findByCpf(cpf );
-        return items;
+    public Associado findByCpf(String cpf) {
+       return repository.findByCpf(cpf );
     }
 
 
@@ -100,7 +98,7 @@ public class AssociadoServiceImpl implements IAssociadoService {
                 throw new EntityExistsException();
             }
 
-            if (!findByCpf(value.getCpf()).isEmpty()) {
+            if (findByCpf(value.getCpf()) != null) {
                 throw new Exception("Já existe associado com esse CPF");
             }
 
@@ -124,7 +122,7 @@ public class AssociadoServiceImpl implements IAssociadoService {
                 throw new EntityNotFoundException();
             }
 
-            if (findByCpf(value.getCpf()).stream().filter(p -> !p.getId().equals(value.getId())).count() > 0) {
+            if (findByCpf(value.getCpf())!= null) {
                 throw new Exception("Já existe associado com esse CPF");
             }
 
@@ -191,7 +189,7 @@ public class AssociadoServiceImpl implements IAssociadoService {
                 throw new EntityExistsException("Associado já cadastrado para inserir");
             }
 
-            if (findByCpf(associadoVO.getCpf()).stream().filter(p -> !p.getId().equals(associadoVO.getId())).count() > 0) {
+            if (findByCpf(associadoVO.getCpf()) != null) {
                 throw new ValidationException("CPF duplicado");
             }
 
@@ -226,7 +224,7 @@ public class AssociadoServiceImpl implements IAssociadoService {
                 throw new EntityNotFoundException("Associado não cadastrado");
             }
 
-            if (findByCpf(value.getCpf()).stream().filter(p -> !p.getId().equals(value.getId())).count() > 0) {
+            if (findByCpf(value.getCpf()) != null) {
                 throw new ValidationException("CPF duplicado");
             }
 

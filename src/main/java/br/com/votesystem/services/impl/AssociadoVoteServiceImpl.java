@@ -76,14 +76,13 @@ public class AssociadoVoteServiceImpl implements IAssociadoVotoService {
     * 
     */
     @Override
-    public VotoAssociado findById(final String id) {
-        return repository.findById(id).orElse(null);
+    public VotoAssociado findById( Long id) {
+        return repository.findById(id);
     }
 
-   
-    @Override
-    public boolean exists(final String id) {
-        return findById(id) != null;
+   @Override
+    public boolean exists(Long id) {
+        return repository.findById(id) != null;
     }
 
    
@@ -108,15 +107,15 @@ public class AssociadoVoteServiceImpl implements IAssociadoVotoService {
                 throw new NullPointerException("Voto nulo");
             }
 
-            if (exists(value.getId().toString())) {
+            if (exists(Long.valueOf(value.getId()))) {
                 throw new EntityExistsException("Voto já existe");
             }
 
-            if (value.getPoll() == null) {
+            if (value.getVotacaoSessao() == null) {
                 throw new NullPointerException("Sessão nula");
             }
 
-            VotacaoSessao poll = votSessaoRepository.getById(value.getPoll().getId());
+            VotacaoSessao poll = votSessaoRepository.getById(value.getVotacaoSessao().getId());
 
             if (poll == null) {
                 throw new EntityNotFoundException("Sessão não existe");
@@ -130,7 +129,7 @@ public class AssociadoVoteServiceImpl implements IAssociadoVotoService {
                 throw new NullPointerException("Associado nulo");
             }
 
-            Associado associate = associadoRepository.getById(value.getAssociado().getCpf());
+            Associado associate = associadoRepository.findByCpf(value.getAssociado().getCpf());
             if (associate == null) {
                 throw new EntityNotFoundException("Associado não existe");
             }
@@ -147,13 +146,13 @@ public class AssociadoVoteServiceImpl implements IAssociadoVotoService {
             }
 
             obj.setAssociado(associate);
-            obj.setPoll(poll);
+            obj.setVotacaoSessao(poll);
             obj = repository.save(obj);
         } catch (Exception e) {
             logger.warn("Voto não pode ser computado {} Voto: {}, associado: {}, sessao: {}", e,
                     obj,
                     obj.getAssociado() != null ? obj.getAssociado() : null,
-                    obj.getPoll() != null ? obj.getPoll() : null);
+                    obj.getVotacaoSessao() != null ? obj.getVotacaoSessao() : null);
             throw e;
         }
 
@@ -165,7 +164,7 @@ public class AssociadoVoteServiceImpl implements IAssociadoVotoService {
     @Transactional
     public String add(final AssociadoVoteDTO value) throws Exception {
         String id = null;
-
+        
         try {
             if (value == null) {
                 throw new NullPointerException("Voto nulo");
@@ -173,22 +172,22 @@ public class AssociadoVoteServiceImpl implements IAssociadoVotoService {
 
             // If not setted id, set
             if (value.getId() == null) {
-                value.setId(new VotoAssociado().getId().toString());
+                value.setId(new VotoAssociado().getId());
             }
 
             if (!validator.validate(value)) {
                 throw new ValidationException("Voto inválido");
             }
 
-            if (exists(value.getId())) {
+            if (exists(Long.valueOf(value.getId()))) {
                 throw new EntityExistsException("Voto já existe");
             }
 
-            if (value.getMinuteMeetingId() == null) {
+            if (value.getVotoAtaId() == null) {
                 throw new NullPointerException("Ata nula");
             }
 
-            VotacaoAta minuteMeeting = votoAtaRepository.getById(value.getMinuteMeetingId());
+            VotacaoAta minuteMeeting = votoAtaRepository.findById(Long.valueOf(value.getVotoAtaId()));
 
             if (minuteMeeting == null) {
                 throw new EntityNotFoundException("Ata não existe");
@@ -204,11 +203,11 @@ public class AssociadoVoteServiceImpl implements IAssociadoVotoService {
                 throw new ValidationException("Sessão de voto encerrada");
             }
 
-            if (value.getAssociateId() == null) {
+            if (value.getAssociadoId() == null) {
                 throw new NullPointerException("Associado nulo");
             }
 
-            Associado associate = associadoRepository.getById(value.getAssociateId());
+            Associado associate = associadoRepository.findById(Long.valueOf(value.getAssociadoId()));
 
             if (associate == null) {
                 throw new EntityNotFoundException("Associado não existe");
@@ -218,11 +217,11 @@ public class AssociadoVoteServiceImpl implements IAssociadoVotoService {
 
             if (poll.getVotos()
                     .stream()
-                    .anyMatch(p -> p.getAssociado().getId().equals(value.getAssociateId()))) {
+                    .anyMatch(p -> p.getAssociado().getId().equals(value.getAssociadoId()))) {
                 throw new EntityExistsException("Associado já votou na sessão");
             }
 
-            if (value.getVote() == null) {
+            if (value.getVoto() == null) {
                 throw new ValidationException("Voto do associado nulo");
             }
 
@@ -234,13 +233,13 @@ public class AssociadoVoteServiceImpl implements IAssociadoVotoService {
                 throw new ValidationException("CPF não permitido para votar");
             }
 
-            id = value.getId();
+            id = value.getId().toString();
             sendMessage.send(new Action<>(value, CRUD.CREATE));
         } catch (Exception e) {
             logger.warn("Voto não pode ser computado {} Voto: {}, associado: {}, minuto: {}", e,
                     value.getId(),
-                    value.getAssociateId(),
-                    value.getMinuteMeetingId());
+                    value.getAssociadoId(),
+                    value.getVotoAtaId());
             throw e;
         }
 
@@ -254,9 +253,9 @@ public class AssociadoVoteServiceImpl implements IAssociadoVotoService {
 
         try {
             obj.setId(Long.valueOf(value.getId()));
-            obj.setAssociado(associadoRepository.getById(value.getAssociateId()));
-            obj.setPoll(votoAtaRepository.getById(value.getMinuteMeetingId()).getPoll());
-            obj.setVoto(value.getVote());
+            obj.setAssociado(associadoRepository.findById(value.getAssociadoId()));
+            obj.setVotacaoSessao(votoAtaRepository.findById(value.getVotoAtaId()).getPoll());
+            obj.setVoto(value.getVoto());
 
         } catch (Exception e) {
             obj = null;
@@ -265,5 +264,7 @@ public class AssociadoVoteServiceImpl implements IAssociadoVotoService {
 
         return obj;
     }
+
+
 
 }

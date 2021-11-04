@@ -43,7 +43,7 @@ public class VotoAssociado implements Serializable {
     @NotNull(message = "Sessão pode ser nula")
     @ManyToOne
     @JoinColumn(name="sessao_id")
-    private VotacaoSessao votacao = null;
+    private VotacaoSessao votacaoSessao = null;
 
     @NotNull(message = "Voto não pode ser nulo")
     @Enumerated(EnumType.ORDINAL)
@@ -55,7 +55,7 @@ public class VotoAssociado implements Serializable {
      */
     public VotoAssociado() {
         this.associado = null;
-        this.votacao = null;
+        this.votacaoSessao = null;
         this.voto = null;
     }
 
@@ -73,68 +73,13 @@ public class VotoAssociado implements Serializable {
      * Setters and Getters
      */
 
-    /**
-     * Return associate
-     * @return associate
-     */
-    public Associado getAssociado() {
-        return associado;
-    }
-
-    /**
-     * Set associate
-     * @param associate
-     */
-    public void setAssociado(Associado associate) {
-        this.associado = associate;
-    }
-
-    /**
-     * Return poll
-     * @return poll
-     */
-    public VotacaoSessao getPoll() {
-        return votacao;
-    }
-
-    /**
-     * Set poll
-     * @param poll
-     */
-    public void setPoll(VotacaoSessao poll) {
-        this.votacao = poll;
-    }
-
-    /**
-     * Return voto
-     * @return voto
-     */
-    public Voto getVoto() {
-        return voto;
-    }
-
-    /**
-     * Set voto
-     * @param voto
-     */
-    public void setVoto(Voto voto) {
-        this.voto = voto;
-    }
-
+     
     /**
      * Check if valid
      * @return valid
      */
     @Transient
     public boolean isValid() {
-        return getAssociado() != null && getPoll() != null && getVoto() != null;
-    }
-
-    /**
-     * @param other
-     * @return same
-     */
-    public boolean same(final VotoAssociado other) {
         return getAssociado() != null;
     }
 
@@ -146,13 +91,31 @@ public class VotoAssociado implements Serializable {
 		this.id = id;
 	}
 
-	public VotacaoSessao getVotacao() {
-		return votacao;
+	public Associado getAssociado() {
+		return associado;
 	}
 
-	public void setVotacao(VotacaoSessao votacao) {
-		this.votacao = votacao;
+	public void setAssociado(Associado associado) {
+		this.associado = associado;
 	}
+
+	public VotacaoSessao getVotacaoSessao() {
+		return votacaoSessao;
+	}
+
+	public void setVotacaoSessao(VotacaoSessao votacaoSessao) {
+		this.votacaoSessao = votacaoSessao;
+	}
+
+	public Voto getVoto() {
+		return voto;
+	}
+
+	public void setVoto(Voto voto) {
+		this.voto = voto;
+	}
+
+
     
     
 }

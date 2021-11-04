@@ -7,4 +7,5 @@ import br.com.votesystem.domain.persistence.VotoAssociado;
 
 @Repository
 public interface IAssociadoVoteRepository extends JpaRepository<VotoAssociado, String> {
+	VotoAssociado findById(Long id);
 }

@@ -8,9 +8,10 @@ import br.com.votesystem.domain.persistence.VotoAssociado;
 import java.util.Set;
 
 public interface IAssociadoVotoService {
-    VotoAssociado findById(String id);
+	
+    VotoAssociado findById(Long id);
 
-    boolean exists(String id);
+    boolean exists(Long id);
 
     boolean validate(VotoAssociado value);
 

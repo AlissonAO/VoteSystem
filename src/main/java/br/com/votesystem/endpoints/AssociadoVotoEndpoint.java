@@ -44,7 +44,7 @@ public class AssociadoVotoEndpoint {
      * @return poll added
      */
     @PostMapping("/")
-    public ResponseEntity<String> add(@Valid @RequestBody final AssociadoVoteDTO value, final HttpServletRequest request) throws Exception {
+    public ResponseEntity<String> add(@RequestBody  AssociadoVoteDTO value,  HttpServletRequest request) throws Exception {
         return ResponseEntity.ok(endpointService.process(RETRIEVE_TEMPLATE, associadoVotoService.add(value), request));
     }
 

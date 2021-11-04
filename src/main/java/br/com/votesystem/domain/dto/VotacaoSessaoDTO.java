@@ -14,10 +14,10 @@ public class VotacaoSessaoDTO implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@JsonProperty("id")
-	private String id = null;
+	private Long id = null;
 	
 	@JsonProperty("idVotoAta")
-	private String idVotoAta = null;
+	private Long idVotoAta = null;
 
 	@JsonProperty("duracao")
 	private Long duracao = null;
@@ -39,7 +39,7 @@ public class VotacaoSessaoDTO implements Serializable {
 	 *
 	 * @return idVotoAta 
 	 */
-	public String getIdVotoAta () {
+	public Long getIdVotoAta () {
 		return idVotoAta;
 	}
 
@@ -48,10 +48,8 @@ public class VotacaoSessaoDTO implements Serializable {
 	 *
 	 * @param idVotoAta 
 	 */
-	public void setIdVotoAta(String idVotoAta ) {
-		this.idVotoAta = idVotoAta  != null && !idVotoAta .trim().isEmpty()
-				? idVotoAta .trim().toLowerCase()
-				: null;
+	public void setIdVotoAta(Long idVotoAta ) {
+		this.idVotoAta = idVotoAta;
 	}
 
 	/**
@@ -71,12 +69,14 @@ public class VotacaoSessaoDTO implements Serializable {
 	public void setDuracao(Long duracao) {
 		this.duracao = duracao;
 	}
-	
-	public String getId() {
+
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(String id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
+	
+
 }

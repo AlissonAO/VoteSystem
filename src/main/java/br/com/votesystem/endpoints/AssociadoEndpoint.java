@@ -40,8 +40,6 @@ public class AssociadoEndpoint {
     /**
      * Constructor
      *
-     * @param associadoService
-     * @param endpointService
      */
     @Autowired
     public AssociadoEndpoint(final IAssociadoService associadoService, final IEndpointService endpointService) {
@@ -49,36 +47,21 @@ public class AssociadoEndpoint {
         this.endpointService = endpointService;
     }
 
-    /**
-     * Add a associate
-     *
-     * @param value
-     * @return associate added
-     */
+   
     @PostMapping("/")
     public ResponseEntity<String> add(@Valid @RequestBody final AssociadoDTO value, final HttpServletRequest request) throws Exception {
         String uri = endpointService.process(RETRIEVE_TEMPLATE, associadoService.add(value), request);
         return ResponseEntity.ok(uri);
     }
 
-    /**
-     * Update a associate
-     *
-     * @param value
-     * @return associate added
-     */
+  
     @PutMapping
     public ResponseEntity<String> update(@Valid @RequestBody() final AssociadoDTO value, final HttpServletRequest request) throws Exception {
         String uri = endpointService.process(RETRIEVE_TEMPLATE, associadoService.update(value), request);
         return ResponseEntity.ok(uri);
     }
 
-    /**
-     * Remove a associate
-     *
-     * @param id
-     * @return associate added
-     */
+  
     @DeleteMapping("/{id}")
     public ResponseEntity<String> remove(@PathVariable(value = "id", required = true) final Long id, final HttpServletRequest request) throws Exception {
         AssociadoDTO value = new AssociadoDTO(id);
@@ -86,23 +69,13 @@ public class AssociadoEndpoint {
         return ResponseEntity.ok(uri);
     }
 
-    /**
-     * Return associates by identification
-     *
-     * @param identification
-     * @return associates
-     */
+   
     @GetMapping(path = "/cpf/{cpf}")
     public ResponseEntity<Collection<AssociadoDTO>> findByIdentification(@PathVariable(value = "cpf", required = true) final String cpf) {
         return ResponseEntity.ok(convert(associadoService.findByCpf(cpf)));
     }
 
-    /**
-     * Return associate by id
-     *
-     * @param id
-     * @return associate
-     */
+  
     @GetMapping("/{id}")
     public ResponseEntity<AssociadoDTO> findById(@PathVariable(value = "id", required = true) final String id) throws Exception {
         AssociadoDTO dto = associadoService.convert(associadoService.findById(Long.valueOf(id)));
@@ -111,30 +84,18 @@ public class AssociadoEndpoint {
         return new ResponseEntity<>(dto, status);
     }
 
-    /**
-     * Return associates
-     *
-     * @return associates
-     */
-    @GetMapping
-    public Page<AssociadoDTO> findAll(final Pageable pageable) {
-        Page<Associado> pagePU = associadoService.findAll(pageable);
-        Page<AssociadoDTO> page = new PageImpl<>(convert(pagePU.getContent()), pagePU.getPageable(), pagePU.getTotalElements());
+   
+//    @GetMapping
+//    public Page<AssociadoDTO> findAll(final Pageable pageable) {
+//        Page<Associado> pagePU = associadoService.findAll(pageable);
+//        Page<AssociadoDTO> page = new PageImpl<>(convert(pagePU.getContent()), pagePU.getPageable(), pagePU.getTotalElements());
+//
+//        return page;
+//    }
 
-        return page;
+ 
+    private List<AssociadoDTO> convert(Associado values) {
+        return (List<AssociadoDTO>) values;
+        
     }
-
-    /**
-     * Convert collection of AssociatePU in AssociateDTO
-     *
-     * @param values
-     * @return associates
-     */
-    private List<AssociadoDTO> convert(final Collection<Associado> values) {
-        return values.stream()
-                .filter(p -> p != null)
-                .map(p -> associadoService.convert(p))
-                .collect(Collectors.toList());
-    }
-
 }

@@ -27,13 +27,13 @@ public class VotacaoAtaDTO implements Serializable {
     private String resumo = null;
 
     @JsonProperty("votosSim")
-    private Long votosSim = null;
+    private Integer votosSim = null;
 
     @JsonProperty("votosNao")
-    private Long votosNao = null;
+    private Integer votosNao = null;
 
     @JsonProperty("votosTotal")
-    private Long votosTotal = null;
+    private Integer votosTotal = null;
 
     /**
      * Constructor
@@ -83,7 +83,7 @@ public class VotacaoAtaDTO implements Serializable {
     * @param descricao
     * @param resumo
     */
-    public VotacaoAtaDTO(Long id, Long votosSim, Long votosNao, Long votosTotal, String descricao, String resumo) {
+    public VotacaoAtaDTO(Long id, Integer votosSim, Integer votosNao, Integer votosTotal, String descricao, String resumo) {
         setId(id);
         setDescricao(descricao);
         setResumo(resumo);
@@ -99,7 +99,7 @@ public class VotacaoAtaDTO implements Serializable {
      * @param votosNao
      * @param votosTotal
      */
-    public VotacaoAtaDTO(Long id, Long votosSim, Long votosNao, Long votosTotal) {
+    public VotacaoAtaDTO(Long id, Integer votosSim, Integer votosNao, Integer votosTotal) {
     	setId(id);
     	setVotosSim(votosSim);
         setvotosNao(votosNao);
@@ -148,9 +148,9 @@ public class VotacaoAtaDTO implements Serializable {
      * Return votosSim
      * @return votosSim
      */
-    public Long getVotosSim() {
+    public Integer getVotosSim() {
         if(votosSim == null) {
-            this.votosSim = 0L;
+            this.votosSim = 0;
         }
         return votosSim;
     }
@@ -159,7 +159,7 @@ public class VotacaoAtaDTO implements Serializable {
      * Set votosSim
      * @param votosSim
      */
-    public void setVotosSim(Long votosSim) {
+    public void setVotosSim(Integer votosSim) {
         this.votosSim = votosSim != null && votosSim >= 0 ? votosSim : null;
     }
 
@@ -168,9 +168,9 @@ public class VotacaoAtaDTO implements Serializable {
    * @return
    */
     
-    public Long getVotosNao() {
+    public Integer getVotosNao() {
         if(votosNao == null) {
-            this.votosNao = 0L;
+            this.votosNao = 0;
         }
         return votosNao;
     }
@@ -179,7 +179,7 @@ public class VotacaoAtaDTO implements Serializable {
     * 
     * @param votosNao
     */
-    public void setvotosNao(Long countDisagree) {
+    public void setvotosNao(Integer countDisagree) {
         this.votosNao = countDisagree != null && countDisagree >= 0 ? countDisagree : null;
     }
 
@@ -187,7 +187,7 @@ public class VotacaoAtaDTO implements Serializable {
      * Return votosTotal
      * @return votosTotal
      */
-    public Long getVotosTotal() {
+    public Integer getVotosTotal() {
         if(votosTotal == null) {
             this.votosTotal = getVotosSim() + getVotosNao();
         }
@@ -198,7 +198,7 @@ public class VotacaoAtaDTO implements Serializable {
      * Set votosTotal
      * @param votosTotal
      */
-    public void setVotosTotal(Long votosTotal) {
+    public void setVotosTotal(Integer votosTotal) {
         this.votosTotal = votosTotal != null && votosTotal >= 0 ? votosTotal : null;
     }
 
