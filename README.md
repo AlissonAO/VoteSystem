@@ -58,8 +58,7 @@ Para os EndPoits acesse o caminho http://localhost:8080/swagger-ui/index.html?co
 
  ![image](https://user-images.githubusercontent.com/457048/140412167-8f6aa2f7-7d2f-458c-8357-45554e27b5ae.png)
 
-# Obs: 
-  Como só tive 2 dias para fazer, pode ocorrer um erro ou outro, mas a aplicação esta rodando 100%. 
+
 
 
 
